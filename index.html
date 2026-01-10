@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同济大学北京校友足球队 - 2025年度赛况半程总结</title>
+    <!-- 引入 Tailwind CSS 进行快速样式开发 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 FontAwesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- 引入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- 引入 ECharts 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+    <style>
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #f0f4f8; }
+        .tongji-blue { color: #00519E; }
+        .bg-tongji-blue { background-color: #00519E; }
+        .hero-pattern {
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+        }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .counter { transition: all 2s ease-out; }
+        
+        /* 趣味标签颜色 */
+        .tag-warrior { @apply bg-red-100 text-red-800 border-red-200; } /* 外战硬汉 */
+        .tag-training { @apply bg-green-100 text-green-800 border-green-200; } /* 内战幻神 */
+        .tag-wolf { @apply bg-gray-800 text-white border-gray-600; } /* 独狼 */
+        .tag-waiter { @apply bg-yellow-100 text-yellow-800 border-yellow-200; } /* 喂饼大师 */
+        .tag-iron { @apply bg-blue-100 text-blue-800 border-blue-200; } /* 铁人 */
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- 1. 封面模块：荣耀时刻 -->
+    <header class="relative bg-tongji-blue text-white overflow-hidden h-screen min-h-[600px] flex flex-col justify-center items-center text-center px-4">
+        <div class="absolute inset-0 hero-pattern"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
+        
+        <div class="z-10 animate-fade-in-up">
+            <h2 class="text-xl md:text-2xl tracking-widest uppercase mb-4 opacity-90">同济大学北京校友足球队</h2>
+            <h1 class="text-4xl md:text-7xl font-black mb-6 leading-tight">
+                2025 <span class="text-yellow-400">半程风云录</span>
+            </h1>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 text-gray-200">
+                数据不说谎，汗水不白流。<br>
+                从奥森的夕阳到仰山的灯光，记录每一个进球与助攻。
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-8 mt-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold counter" id="total-goals">0</div>
+                    <div class="text-sm opacity-75">年度总进球</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold counter" id="total-assists">0</div>
+                    <div class="text-sm opacity-75">年度总助攻</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold counter" id="total-games">0</div>
+                    <div class="text-sm opacity-75">总出勤人次</div>
+                </div>
+            </div>
+            
+            <button onclick="document.getElementById('overview').scrollIntoView({behavior: 'smooth'})" class="mt-16 animate-bounce cursor-pointer">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 2. 球队概览：内外双修 -->
+    <section id="overview" class="py-20 max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12 tongji-blue"><i class="fas fa-chart-pie mr-2"></i> 球队大盘数据</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- 左侧：外战数据 -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg border-t-4 border-red-500 card-hover transition duration-300">
+                <h3 class="text-xl font-bold mb-6 flex items-center">
+                    <span class="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3"><i class="fas fa-fist-raised"></i></span>
+                    对外征战 (友谊+正式)
+                </h3>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <div class="text-3xl font-bold text-red-600" id="match-goals">0</div>
+                        <div class="text-xs text-gray-500">外战进球</div>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <div class="text-3xl font-bold text-red-600" id="match-assists">0</div>
+                        <div class="text-xs text-gray-500">外战助攻</div>
+                    </div>
+                </div>
+                <div class="mt-6 text-sm text-gray-600 leading-relaxed">
+                    <p>这是球队的硬实力体现。每一次对外作战的进球都含金量十足，代表了同济校友队的江湖地位。</p>
+                </div>
+            </div>
+
+            <!-- 右侧：内训数据 -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg border-t-4 border-green-500 card-hover transition duration-300">
+                <h3 class="text-xl font-bold mb-6 flex items-center">
+                    <span class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3"><i class="fas fa-running"></i></span>
+                    内部磨砺 (内训+活动)
+                </h3>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600" id="training-goals">0</div>
+                        <div class="text-xs text-gray-500">内训进球</div>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600" id="training-assists">0</div>
+                        <div class="text-xs text-gray-500">内训助攻</div>
+                    </div>
+                </div>
+                <div class="mt-6 text-sm text-gray-600 leading-relaxed">
+                    <p>这里是快乐的源泉，也是数据的刷分场。有人在这里重拳出击，有人在这里修身养性。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 三巨头：封神榜 -->
+    <section class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 tongji-blue"><i class="fas fa-trophy mr-2"></i> 赛程半程 · 三大榜单</h2>
+            <p class="text-center text-gray-500 mb-12">数据统计包含友谊赛与内训赛总和</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- 射手王 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden relative">
+                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 h-2"></div>
+                    <div class="p-6 text-center">
+                        <div class="inline-block p-4 rounded-full bg-yellow-100 text-yellow-600 text-4xl mb-4">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">金靴奖 (射手王)</h3>
+                        <p class="text-gray-400 text-sm mb-6">Total Goals</p>
+                        <div id="top-scorers" class="space-y-4">
+                            <!-- JS 填充 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 助攻王 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden relative">
+                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-2"></div>
+                    <div class="p-6 text-center">
+                        <div class="inline-block p-4 rounded-full bg-blue-100 text-blue-600 text-4xl mb-4">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">做饼师傅 (助攻王)</h3>
+                        <p class="text-gray-400 text-sm mb-6">Total Assists</p>
+                        <div id="top-assisters" class="space-y-4">
+                            <!-- JS 填充 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 铁人奖 -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden relative">
+                    <div class="bg-gradient-to-r from-gray-600 to-gray-800 h-2"></div>
+                    <div class="p-6 text-center">
+                        <div class="inline-block p-4 rounded-full bg-gray-200 text-gray-700 text-4xl mb-4">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">全勤铁人</h3>
+                        <p class="text-gray-400 text-sm mb-6">Most Appearances</p>
+                        <div id="top-apps" class="space-y-4">
+                            <!-- JS 填充 -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 趣味榜：绿茵江湖 -->
+    <section class="py-20 max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12 tongji-blue">
+            <i class="fas fa-mask mr-2"></i> 绿茵江湖 · 趣味画像
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="fun-stats-container">
+            <!-- JS 自动生成趣味卡片 -->
+        </div>
+    </section>
+
+    <!-- 5. 完整数据表 -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8 tongji-blue">完整琅琊榜</h2>
+            
+            <div class="mb-6 flex justify-between items-center flex-wrap gap-4">
+                <input type="text" id="search-input" placeholder="搜索球员姓名..." class="border border-gray-300 rounded-lg px-4 py-2 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <div class="text-sm text-gray-500">* 点击表头可排序</div>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg shadow border border-gray-200">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-50 text-gray-600 text-xs uppercase font-semibold tracking-wider">
+                        <tr>
+                            <th class="px-6 py-3 text-left cursor-pointer hover:bg-gray-100" onclick="sortTable('name')">姓名 <i class="fas fa-sort"></i></th>
+                            <th class="px-6 py-3 text-center cursor-pointer hover:bg-gray-100" onclick="sortTable('totalScore')">总积分 <i class="fas fa-sort"></i></th>
+                            <th class="px-6 py-3 text-center cursor-pointer hover:bg-gray-100 bg-red-50 text-red-600" onclick="sortTable('totalGoals')">总进球 <i class="fas fa-sort"></i></th>
+                            <th class="px-6 py-3 text-center cursor-pointer hover:bg-gray-100 bg-blue-50 text-blue-600" onclick="sortTable('totalAssists')">总助攻 <i class="fas fa-sort"></i></th>
+                            <th class="px-6 py-3 text-center cursor-pointer hover:bg-gray-100" onclick="sortTable('totalApps')">总出场 <i class="fas fa-sort"></i></th>
+                            <th class="px-6 py-3 text-center cursor-pointer hover:bg-gray-100" onclick="sortTable('matchGoals')">外战进球 <i class="fas fa-sort"></i></th>
+                            <th class="px-6 py-3 text-center cursor-pointer hover:bg-gray-100" onclick="sortTable('trainingGoals')">内战进球 <i class="fas fa-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm divide-y divide-gray-200" id="roster-body">
+                        <!-- JS 填充 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-sm">
+        <p>© 2025 同济大学北京校友足球队数据中心</p>
+        <p class="mt-2">Generated by AI Assistant based on Official Stats</p>
+    </footer>
+
+    <!-- 逻辑脚本 -->
+    <script>
+        // 1. 数据源：手动清洗自第1页 PDF 识别结果
+        // 格式：[姓名, 总分, 比赛分, 比赛出场, 比赛进球, 比赛助攻, 内训分, 内训出场, 内训进球, 内训助攻]
+        const rawData = [
+            ["王立强", 203.5, 146.5, 22, 18, 21, 57, 36, 8, 13],
+            ["许炎彬", 196, 96, 18, 12, 4, 100, 39, 38, 23],
+            ["陈巍", 169.8, 85.75, 16, 11.5, 3, 84, 42, 27, 15],
+            ["张泽华", 209.5, 100.5, 18, 11, 8, 109, 42, 40, 27],
+            ["李惠光", 163, 89, 17, 9, 5, 74, 27, 37, 10],
+            ["李欣", 180.5, 105.5, 20, 6, 11, 75, 42, 13, 20],
+            ["郑一鸣", 161, 87, 21, 0, 2, 74, 48, 21, 5],
+            ["卜征", 145.5, 71.5, 13, 6, 7, 74, 30, 27, 17],
+            ["朱新涛", 118.5, 80.5, 13, 14, 5, 38, 21, 10, 7],
+            ["周泽林", 107, 74, 11, 11, 9, 33, 15, 9, 9],
+            ["胡昊", 81, 52, 13, 0, 0, 29, 27, 2, 0],
+            ["刘军伟", 87, 4, 1, 0, 0, 83, 24, 43, 16],
+            ["韩金", 44, 28, 7, 0, 0, 16, 15, 1, 0],
+            ["张昭", 50.5, 21.5, 5, 0, 1, 29, 15, 7, 7],
+            ["杨艳华", 59, 47, 11, 2, 0, 12, 12, 0, 0],
+            ["陶卓辉", 40.5, 37.5, 6, 4, 5, 3, 3, 0, 0],
+            ["高照宇", 33.5, 33.5, 8, 0, 1, 0, 0, 0, 0],
+            ["王泽熙", 39.5, 32.5, 7, 1, 2, 7, 6, 1, 0],
+            ["朱永帆", 40.5, 34.5, 6, 6, 1, 6, 6, 0, 0],
+            ["郭胜亚", 71, 44, 11, 0, 0, 27, 27, 0, 0],
+            ["袁政成", 22.5, 22.5, 3, 6, 1, 0, 0, 0, 0],
+            ["洪哲", 38, 12, 3, 0, 0, 26, 21, 5, 0],
+            ["冯冠华", 17, 8, 2, 0, 0, 9, 9, 0, 0],
+            ["公技善", 18, 18, 3, 2, 2, 0, 0, 0, 0],
+            ["张哲", 20, 8, 2, 0, 0, 12, 12, 0, 0],
+            ["胡少康", 17, 8, 2, 0, 0, 9, 9, 0, 0],
+            ["张凡", 6, 0, 0, 0, 0, 6, 6, 0, 0],
+            ["辛纬韬", 5.5, 5.5, 1, 0, 1, 0, 0, 0, 0],
+            ["孙道成", 10, 4, 1, 0, 0, 6, 6, 0, 0],
+            ["张博文", 19.5, 13.5, 3, 1, 0, 6, 6, 0, 0]
+        ];
+
+        // 2. 数据对象化处理
+        let players = rawData.map(p => ({
+            name: p[0],
+            totalScore: p[1],
+            matchApps: p[3],
+            matchGoals: p[4],
+            matchAssists: p[5],
+            trainingApps: p[7],
+            trainingGoals: p[8],
+            trainingAssists: p[9],
+            // 计算衍生数据
+            totalGoals: p[4] + p[8],
+            totalAssists: p[5] + p[9],
+            totalApps: p[3] + p[7],
+            goalRatio: (p[4] + p[8]) > 0 ? (p[4] + p[8]) / (p[3] + p[7]) : 0,
+            trainingGoalRatio: (p[4] + p[8]) > 5 ? p[8] / (p[4] + p[8]) : 0, // 内训进球占比
+            assistToGoalRatio: (p[5] + p[9]) > 0 ? (p[5] + p[9]) / ((p[4] + p[8]) || 1) : 0
+        }));
+
+        // 3. 初始化渲染
+        document.addEventListener('DOMContentLoaded', () => {
+            renderOverview();
+            renderTopCharts();
+            renderFunStats();
+            renderTable(players);
+            animateNumbers();
+        });
+
+        // 模块：概览数据
+        function renderOverview() {
+            const totals = players.reduce((acc, curr) => ({
+                goals: acc.goals + curr.totalGoals,
+                assists: acc.assists + curr.totalAssists,
+                apps: acc.apps + curr.totalApps,
+                mGoals: acc.mGoals + curr.matchGoals,
+                mAssists: acc.mAssists + curr.matchAssists,
+                tGoals: acc.tGoals + curr.trainingGoals,
+                tAssists: acc.tAssists + curr.trainingAssists
+            }), { goals:0, assists:0, apps:0, mGoals:0, mAssists:0, tGoals:0, tAssists:0 });
+
+            // 绑定到 HTML
+            document.getElementById('total-goals').innerText = Math.round(totals.goals);
+            document.getElementById('total-assists').innerText = Math.round(totals.assists);
+            document.getElementById('total-games').innerText = Math.round(totals.apps); // 人次
+            
+            document.getElementById('match-goals').innerText = Math.round(totals.mGoals);
+            document.getElementById('match-assists').innerText = Math.round(totals.mAssists);
+            document.getElementById('training-goals').innerText = Math.round(totals.tGoals);
+            document.getElementById('training-assists').innerText = Math.round(totals.tAssists);
+        }
+
+        // 模块：三巨头
+        function renderTopCharts() {
+            // 射手榜
+            const scorers = [...players].sort((a,b) => b.totalGoals - a.totalGoals).slice(0,3);
+            document.getElementById('top-scorers').innerHTML = scorers.map((p, i) => `
+                <div class="flex items-center justify-between border-b pb-2 last:border-0">
+                    <div class="flex items-center">
+                        <span class="w-6 font-bold text-gray-400">#${i+1}</span>
+                        <span class="font-bold text-lg">${p.name}</span>
+                    </div>
+                    <span class="text-xl font-black text-yellow-600">${p.totalGoals}球</span>
+                </div>
+            `).join('');
+
+            // 助攻榜
+            const assisters = [...players].sort((a,b) => b.totalAssists - a.totalAssists).slice(0,3);
+            document.getElementById('top-assisters').innerHTML = assisters.map((p, i) => `
+                <div class="flex items-center justify-between border-b pb-2 last:border-0">
+                    <div class="flex items-center">
+                        <span class="w-6 font-bold text-gray-400">#${i+1}</span>
+                        <span class="font-bold text-lg">${p.name}</span>
+                    </div>
+                    <span class="text-xl font-black text-blue-600">${p.totalAssists}助</span>
+                </div>
+            `).join('');
+
+            // 铁人榜
+            const irons = [...players].sort((a,b) => b.totalApps - a.totalApps).slice(0,3);
+            document.getElementById('top-apps').innerHTML = irons.map((p, i) => `
+                <div class="flex items-center justify-between border-b pb-2 last:border-0">
+                    <div class="flex items-center">
+                        <span class="w-6 font-bold text-gray-400">#${i+1}</span>
+                        <span class="font-bold text-lg">${p.name}</span>
+                    </div>
+                    <span class="text-xl font-black text-gray-600">${p.totalApps}场</span>
+                </div>
+            `).join('');
+        }
+
+        // 模块：趣味数据生成逻辑
+        function renderFunStats() {
+            const container = document.getElementById('fun-stats-container');
+            const cards = [];
+
+            // 1. 内战幻神 (Training Ronaldo): 内训进球 > 20 且 内训进球占比 > 70%
+            const trainingKings = players.filter(p => p.trainingGoals > 15 && p.trainingGoalRatio > 0.75).sort((a,b) => b.trainingGoals - a.trainingGoals);
+            if(trainingKings.length > 0) {
+                cards.push(createFunCard('内战幻神', 'training', 'fas fa-ghost', trainingKings[0].name, 
+                    `内训狂轰 ${trainingKings[0].trainingGoals} 球`, '训练场上的C罗，只要不打正式比赛，我就无敌。'));
+            }
+
+            // 2. 外战硬汉 (The Warrior): 正式比赛进球 > 3 且 正式比赛进球占比 > 60%
+            const warriors = players.filter(p => p.matchGoals > 3 && (p.matchGoals / (p.totalGoals||1)) > 0.6).sort((a,b) => b.matchGoals - a.matchGoals);
+            if(warriors.length > 0) {
+                cards.push(createFunCard('外战硬汉', 'warrior', 'fas fa-shield-alt', warriors[0].name, 
+                    `正式比赛 ${warriors[0].matchGoals} 球`, '专打硬仗，友谊赛唯唯诺诺，正赛重拳出击。'));
+            }
+
+            // 3. 喂饼大师 (The Waiter): 助攻数 > 进球数 * 1.5 且 总助攻 > 10
+            const waiters = players.filter(p => p.totalAssists > 10 && p.totalAssists > p.totalGoals * 1.2).sort((a,b) => b.totalAssists - a.totalAssists);
+            if(waiters.length > 0) {
+                cards.push(createFunCard('喂饼大师', 'waiter', 'fas fa-concierge-bell', waiters[0].name, 
+                    `送出 ${waiters[0].totalAssists} 次助攻`, '燃烧自己照亮射手，球场上的活雷锋。'));
+            }
+
+            // 4. 独狼 (Lone Wolf): 进球 > 10 且 助攻 < 3
+            const wolfs = players.filter(p => p.totalGoals > 10 && p.totalAssists < 5).sort((a,b) => b.totalGoals - a.totalGoals);
+            if(wolfs.length > 0) {
+                cards.push(createFunCard('孤胆游侠', 'wolf', 'fas fa-wolf-pack-battalion', wolfs[0].name, 
+                    `进${wolfs[0].totalGoals}球 仅${wolfs[0].totalAssists}助`, '球给我，你们看比分牌就行了。'));
+            }
+            
+            // 5. 效率王 (Efficiency): 进球+助攻 / 场次 最高 (场次>10)
+            const effs = players.filter(p => p.totalApps > 10).sort((a,b) => ((b.totalGoals+b.totalAssists)/b.totalApps) - ((a.totalGoals+a.totalAssists)/a.totalApps));
+            if(effs.length > 0) {
+                let rate = ((effs[0].totalGoals+effs[0].totalAssists)/effs[0].totalApps).toFixed(1);
+                cards.push(createFunCard('效率之王', 'iron', 'fas fa-stopwatch', effs[0].name, 
+                    `场均造 ${rate} 球`, '只要我上场，就有人要遭殃。'));
+            }
+
+            container.innerHTML = cards.join('');
+        }
+
+        function createFunCard(title, type, icon, name, stat, desc) {
+            const styles = {
+                'warrior': 'bg-red-50 text-red-800 border-red-200',
+                'training': 'bg-green-50 text-green-800 border-green-200',
+                'waiter': 'bg-yellow-50 text-yellow-800 border-yellow-200',
+                'wolf': 'bg-gray-800 text-white border-gray-600',
+                'iron': 'bg-blue-50 text-blue-800 border-blue-200'
+            };
+            const iconColor = type === 'wolf' ? 'text-gray-400' : 'text-gray-400';
+            
+            return `
+            <div class="relative bg-white p-6 rounded-xl shadow-md border-b-4 ${styles[type].split(' ')[2].replace('text','border')} hover:scale-105 transition-transform duration-300">
+                <div class="absolute top-4 right-4 text-3xl opacity-20 ${iconColor}"><i class="${icon}"></i></div>
+                <div class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide mb-3 ${styles[type]}">${title}</div>
+                <h3 class="text-2xl font-bold mb-1 ${type === 'wolf' ? 'text-gray-800' : 'text-gray-800'}">${name}</h3>
+                <div class="text-xl font-bold mb-2 text-tongji-blue">${stat}</div>
+                <p class="text-sm text-gray-500 italic">"${desc}"</p>
+            </div>
+            `;
+        }
+
+        // 模块：完整表格
+        function renderTable(data) {
+            const tbody = document.getElementById('roster-body');
+            tbody.innerHTML = data.map(p => `
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 font-medium text-gray-900">${p.name}</td>
+                    <td class="px-6 py-4 text-center font-bold">${p.totalScore}</td>
+                    <td class="px-6 py-4 text-center bg-red-50 text-red-700 font-semibold">${p.totalGoals}</td>
+                    <td class="px-6 py-4 text-center bg-blue-50 text-blue-700 font-semibold">${p.totalAssists}</td>
+                    <td class="px-6 py-4 text-center">${p.totalApps}</td>
+                    <td class="px-6 py-4 text-center text-gray-500">${p.matchGoals}</td>
+                    <td class="px-6 py-4 text-center text-gray-500">${p.trainingGoals}</td>
+                </tr>
+            `).join('');
+        }
+
+        // 搜索功能
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = players.filter(p => p.name.toLowerCase().includes(term));
+            renderTable(filtered);
+        });
+
+        // 排序功能
+        let sortDir = -1;
+        function sortTable(key) {
+            sortDir *= -1;
+            const sorted = [...players].sort((a,b) => {
+                if (key === 'name') return sortDir === 1 ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+                return sortDir === 1 ? a[key] - b[key] : b[key] - a[key];
+            });
+            renderTable(sorted);
+        }
+
+        // 数字跳动动画
+        function animateNumbers() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.innerText;
+                const increment = target / 50;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        }
+    </script>
+</body>
+</html>
