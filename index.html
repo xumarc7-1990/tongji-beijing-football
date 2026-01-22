@@ -94,7 +94,7 @@
                 同济大学北京校友足球队
             </h2>
             <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight drop-shadow-2xl">
-                2025年度 <span class="text-yellow-400">数据报告</span>
+                2025年度数据报告
             </h1>
             <p class="text-lg md:text-2xl max-w-4xl mx-auto mb-12 text-gray-100 font-bold leading-relaxed border-t border-b border-white/20 py-8 bg-black/10 backdrop-blur-sm rounded-lg">
                 “没有永远的胜利，只有永远的热爱。<br class="md:hidden">
@@ -148,7 +148,7 @@
         </div>
     </header>
 
-    <!-- 2. 球队概览：友谊赛 vs 娱乐局 (布局调整) -->
+    <!-- 2. 球队概览：友谊赛 vs 娱乐局 -->
     <section id="overview" class="py-16 max-w-7xl mx-auto px-4">
         <h2 class="text-3xl font-bold text-center mb-10 tongji-blue"><i class="fas fa-chart-pie mr-2"></i> 战场分布详情</h2>
         
@@ -175,7 +175,6 @@
                 </div>
                 
                 <div class="border-t border-gray-100 pt-4 mt-auto">
-                    <!-- 评语上移，样式与右侧对齐 -->
                     <p class="text-sm text-gray-600 leading-relaxed bg-gray-50 p-4 rounded mb-4">每一次对外作战的进球都含金量十足，代表了同济校友队的江湖地位。</p>
                     <h4 class="text-xs font-bold text-gray-400 uppercase mb-3">2025 征战对手墙</h4>
                     <div class="flex flex-wrap gap-2" id="opponent-list">
@@ -211,7 +210,7 @@
         </div>
     </section>
 
-    <!-- 3. 三巨头：封神榜 (字体大小调整) -->
+    <!-- 3. 三巨头：封神榜 -->
     <section class="py-16 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-8 tongji-blue"><i class="fas fa-trophy mr-2"></i> 2025 赛季 · 核心榜单</h2>
@@ -283,7 +282,7 @@
         </div>
     </section>
 
-    <!-- 4. 趣味榜：互动翻转卡片 (文案更新) -->
+    <!-- 4. 趣味榜：互动翻转卡片 -->
     <section class="py-16 max-w-7xl mx-auto px-4">
         <h2 class="text-3xl font-bold text-center mb-4 tongji-blue">
             <i class="fas fa-mask mr-2"></i> 绿茵江湖 · 英雄谱
@@ -295,7 +294,7 @@
         </div>
     </section>
 
-    <!-- 5. 完整数据表 (标题更新 & 默认排序修复) -->
+    <!-- 5. 完整数据表 -->
     <section class="py-16 bg-white border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center mb-8">
@@ -354,7 +353,8 @@
             "华电校友", "建研院"
         ];
 
-        // --- 1. 数据源 (校正版) ---
+        // --- 1. 数据源 (最终完整版) ---
+        // 格式: [姓名, 总积分, 友谊赛积分, 友谊赛场次, 友谊赛进球, 友谊赛助攻, 内训积分, 内训场次, 内训进球, 内训助攻]
         const rawData = [
             ["王立强", 203.5, 146.5, 22, 18, 21, 57, 12, 8, 13],
             ["许炎彬", 196, 96, 18, 12, 4, 100, 13, 38, 23],
@@ -385,6 +385,9 @@
             ["张凡", 6, 0, 0, 0, 0, 6, 2, 0, 0],
             ["辛纬韬", 5.5, 5.5, 1, 0, 1, 0, 0, 0, 0],
             ["孙道成", 10, 4, 1, 0, 0, 6, 2, 0, 0],
+            ["陈铁夫", 3, 0, 0, 0, 0, 3, 1, 0, 0],
+            ["杨卓", 4, 4, 1, 0, 0, 0, 0, 0, 0],
+            ["于苏洋", 3, 0, 0, 0, 0, 3, 1, 0, 0],
             ["张博文", 19.5, 13.5, 3, 1, 0, 6, 2, 0, 0]
         ];
 
@@ -398,6 +401,7 @@
             trainingApps: p[7],  
             trainingGoals: Math.round(p[8]), 
             trainingAssists: p[9],
+            // 核心修正：总出场 = 友谊赛场次 + 内训场次 (无需除3，已是次数)
             totalApps: p[3] + p[7],
             totalGoals: Math.round(p[4]) + Math.round(p[8]),
             totalAssists: p[5] + p[9],
@@ -405,7 +409,7 @@
 
         // --- 3. 页面初始化 ---
         document.addEventListener('DOMContentLoaded', () => {
-            // *** CRITICAL FIX: 默认强制按总积分降序排列 ***
+            // 强制按总积分降序排列
             players.sort((a, b) => b.totalScore - a.totalScore);
             
             renderOverview();
@@ -481,7 +485,7 @@
             ).join('');
         }
 
-        // --- 6. 渲染：分列排行榜 (字号微调: header>sub>content) ---
+        // --- 6. 渲染：分列排行榜 ---
         function renderTopCharts() {
             const renderList = (data, valueKey, containerId, colorClass) => {
                 const sorted = [...data].sort((a,b) => b[valueKey] - a[valueKey]);
@@ -525,7 +529,7 @@
             renderList(players, 'totalApps', 'top-apps', 'text-gray-800');
         }
 
-        // --- 7. 渲染：趣味卡片 (文案更新) ---
+        // --- 7. 渲染：趣味卡片 ---
         function renderFunStats() {
             const container = document.getElementById('fun-stats-container');
             const find = (name) => players.find(p => p.name === name) || {matchGoals:0, matchAssists:0, trainingGoals:0, trainingAssists:0, totalApps:0, matchApps:0};
@@ -638,7 +642,7 @@
             renderTable(players.filter(p => p.name.toLowerCase().includes(term)));
         });
 
-        let sortDir = -1; // Default desc because initial sort is desc
+        let sortDir = -1; // Default desc
         function sortTable(key) {
             sortDir *= -1;
             const sorted = [...players].sort((a,b) => {
